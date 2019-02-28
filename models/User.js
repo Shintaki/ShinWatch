@@ -17,7 +17,7 @@ password: {
 },
 avatar: {
     type: String,
-    default: ''
+    default: 'public\\uploads\\default.png'
 },
 date: {
     type: Date,

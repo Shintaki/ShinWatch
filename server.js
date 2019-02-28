@@ -11,6 +11,9 @@ const product = require('./routes/api/product');
 
 const app = express();
 
+//Public Folder
+//app.use('/public', express.static('public'));
+
 //Body parser Middleware
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -21,7 +24,7 @@ const db = require('./config/keys').mongoURI;
 mongoose
     .connect(db,{useNewUrlParser: true})
     .then(()=>console.log("MongoDB connected"))
-    .catch(err => console.log(console.err(err)))
+    .catch(err => console.log(err))
 
 //Passport Middleware
 app.use(passport.initialize());

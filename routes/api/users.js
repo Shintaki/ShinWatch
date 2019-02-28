@@ -4,8 +4,34 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
+const multer = require('multer');
+const fs = require('fs');
+const isEmpty = require('../../validations/is-empty');
 
-
+//Set Storage Engine
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, './public/uploads');
+    },
+    filename: function(req, file, cb) {
+      cb(null, Date.now() + file.originalname);
+    }
+  });
+// Filter only images
+const fileFilter = (req, file, cb) => {
+    // reject a file
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  };
+  
+// Init Upload
+const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter
+});
 // Load User Model
 const User = require('../../models/User')
 
@@ -17,15 +43,21 @@ const validateLoginInput = require('../../validations/login');
 // @access Public
 router.get('/test', (req, res) => res.json({msg :"Users Work"}));   
 
-// @route GET api/users/register
+// @route POST api/users/register
 // @description register users  
 // @access Public
-//TODO : change this to upload image as avatar
-router.post('/register',(req,res)=>{
+//TODO : image not required 
+router.post('/register',upload.single('avatar') , (req,res)=>{
     //Check Validation
     const {errors , isValid} = validateRegisterInput(req.body);
     if(!isValid)
-    {
+    {   
+        //Stop upload and throw errors
+        if(!isEmpty(req.file))
+        fs.unlink(req.file.path, (err) => {
+            if (err) throw err;
+            //console.log('file was deleted');
+          });
         return res.status(400).json(errors);
     }
 
@@ -33,15 +65,25 @@ router.post('/register',(req,res)=>{
     User.findOne({email: req.body.email})
         .then(user => {
         if(user) {
+            //Stop the upload and throw an error
+            if(!isEmpty(req.file))
+            fs.unlink(req.file.path, (err) => {
+                if (err) throw err;
+                console.log('file was deleted');
+              });
             errors.email='Email already exists';
             return res.status(400).json(errors)
-        } else {
+        } 
+        else {
+          
           const newUser = new User({
                 name: req.body.name,
                 email: req.body.email,
-                avatar: req.body.avatar,
                 password: req.body.password
           });
+          //Add image path if user uploads an image
+          if(!isEmpty(req.file)) {newUser.avatar=req.file.path};
+
           bcrypt.genSalt(10,(err,salt)=>{
             bcrypt.hash(newUser.password,salt,(err,hash)=>{
             if (err) throw err;
@@ -54,7 +96,7 @@ router.post('/register',(req,res)=>{
         }
         })
 });
-//@route GET /api/users/login
+//@route POST /api/users/login
 //@description Login user / return Token
 //@access  Public
 router.post('/login',(req,res) => {
