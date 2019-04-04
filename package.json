@@ -22,6 +22,7 @@
     "multer": "^1.4.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "validator": "^10.11.0"
+    "validator": "^10.11.0",
+    "youtube-validate": "^1.2.4"
   }
 }

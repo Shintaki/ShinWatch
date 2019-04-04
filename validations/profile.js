@@ -11,11 +11,20 @@ if(!Validator.isLength(data.handle,{min: 2 , max : 40})){
     if(Validator.isEmpty(data.handle)){
         errors.handle='Handle field is required';
     }
+    if (Validator.isEmpty(data.status)) {
+        errors.status = 'Status field is required';
+      }
+    if (!isEmpty(data.website)) {
+        if (!Validator.isURL(data.website)) {
+          errors.website = 'Not a valid URL';
+        }
+      }
     if(!isEmpty(data.youtube)){
         if(!Validator.isURL(data.youtube)){
         errors.youtube='Not a Valid URL';
         }
     }
+   
 
     if(!isEmpty(data.twitter)){
         if(!Validator.isURL(data.twitter)){

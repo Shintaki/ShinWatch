@@ -12,7 +12,7 @@ const product = require('./routes/api/product');
 const app = express();
 
 //Public Folder
-//app.use('/public', express.static('public'));
+app.use('/public', express.static('public'));
 
 //Body parser Middleware
 app.use(bodyParser.urlencoded({extended: false}));
@@ -53,6 +53,6 @@ res.send('About');
 
 const port = 5000;
 
-app.listen(port , () => {
+app.listen( port  , () => {
 console.log(`Server started at port ${port}`);   
 });

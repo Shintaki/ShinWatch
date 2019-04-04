@@ -56,7 +56,7 @@ router.post('/register',upload.single('avatar') , (req,res)=>{
         if(!isEmpty(req.file))
         fs.unlink(req.file.path, (err) => {
             if (err) throw err;
-            //console.log('file was deleted');
+            console.log('file was deleted');
           });
         return res.status(400).json(errors);
     }

@@ -6,11 +6,22 @@ const PostSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref:'users'
     },
-    object:{
+    description:{
         type: String,
         require:true
     },
-    name:{
+    content:{
+        type: String,
+        require:true
+    },
+    type:{
+        type: String,
+        require:true
+    },
+    handle:{
+        type: String,
+    },
+    title:{
         type: String,
     },
     avatar:{

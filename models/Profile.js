@@ -14,7 +14,18 @@ const ProfileSchema= new Schema({
     type: String,
     default:''
     },
-    
+    website: {
+        type: String,
+        default:''
+    },
+    location: {
+        type: String,
+        default:''
+    },
+    status: {
+        type: String,
+        default:''
+    },
     socials: {
         youtube: {
             type:String

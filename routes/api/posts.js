@@ -2,31 +2,97 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
+const multer = require('multer');
+const fs = require('fs');
+const isEmpty = require('../../validations/is-empty');
+const youtubeValidator = require('youtube-validate');
+
+//Set Storage Engine
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, './public/posts');
+    },
+    filename: function(req, file, cb) {
+      cb(null, Date.now() + file.originalname);
+    }
+  });
+// Filter only images
+const fileFilter = (req, file, cb) => {
+    // reject a file
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  };
+  
+// Init Upload
+const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter
+});
+
 
 //Load Post Model
 const Post = require('../../models/Post')
+//Load Profile Model for the handle
+const Profile = require('../../models/Profile')
 //Load Comment Validation
 const validateCommentInput = require('../../validations/comment');
-// @route GET api/posts/test
-// @description tests posts route
-// @access Public
-router.get('/test', (req, res) => res.json({msg :"Posts Work"}));   
+//Load Post Validation
+const validatePostInput = require('../../validations/post');
+ 
 
 
 // @route POST api/posts
 // @description Create post
 // @access Private 
-//TODO change this to upload video/image
-router.post('/',passport.authenticate('jwt',{session:false}),(req,res)=>{
+router.post('/',passport.authenticate('jwt',{session:false}),upload.single('content'),(req,res)=>{
+    const {errors , isValid} = validatePostInput(req.body,req.file);
+    
+    if(!isValid )
+    {   
+        //Stop upload and throw errors
+        if(!isEmpty(req.file))
+        fs.unlink(req.file.path, (err) => {
+            if (err) throw err;
+            });
+        return res.status(400).json(errors);
+    }
     const newPost=new Post({
-        object:req.body.object, 
-        name: req.user.name, // req.body.name
-        avatar: req.user.avatar, // req.body.avatar
+        description:req.body.description,
+        type:req.body.type,
+        title: req.body.title, 
+        avatar: req.user.avatar, 
         user: req.user.id
     });
+    Profile.findOne({user: req.user.id})
+           .then(profile=>{newPost.handle=profile.handle;
+    if(newPost.type==="Image"){
+    if(!isEmpty(req.file)) {newPost.content=req.file.path}
+    else{errors.content='No file uploaded';
+    return res.status(400).json(errors)}
     newPost.save()
-            .then(post=>res.json(post));
-});
+            .then(post=>res.json(post))
+            .catch(err => console.log(err));
+    
+
+    }
+    else if(newPost.type==="Video")
+    {
+    newPost.content=req.body.content;
+    youtubeValidator.validateUrl(newPost.content)
+                    .then(res=>{newPost.save()
+                          .then(post=>res.json(post))
+                          .catch(err => console.log(err));
+                          })
+                    .catch(err=>{
+                            errors.content='Invalid youtube URL';
+                            return res.status(400).json(errors);
+    })
+    }
+    })
+    });
 
 // @route GET api/posts
 // @description show posts by date
@@ -42,6 +108,16 @@ router.get('/',(req,res)=>{
 // @access Public
 router.get('/:id',(req,res)=>{
     Post.findById(req.params.id)
+        .then(posts=>res.json(posts))
+        .catch(err=>res.status(404).json({message : 'no post with this id found'}))
+})
+
+// @route GET api/posts/user/:iduser
+// @description show all the posts of a user by his id
+// @access Public
+router.get('/handle/:handle',(req,res)=>{
+    Post.find({handle: req.params.handle})
+        .sort({date: -1})
         .then(posts=>res.json(posts))
         .catch(err=>res.status(404).json({message : 'no post with this id found'}))
 })
