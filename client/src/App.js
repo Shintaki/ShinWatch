@@ -18,6 +18,8 @@ import Landing from './components/layout/Landing'
 import Register from './components/auth/Register'
 import Login from './components/auth/Login'
 import PostForm from './components/posts/PostForm'
+import Posts from './components/posts/Posts'
+import Post from './components/posts/Post'
 
 import './App.css';
 
@@ -73,6 +75,8 @@ class App extends Component {
               <Switch>
         <PrivateRoute exact path="/addpost" component={PostForm} />
         </Switch>
+        <Route exact path="/posts" component={Posts} />
+        <Route exact path="/post/:id" component={Post} />
          </div>
         <Footer />
         </div >

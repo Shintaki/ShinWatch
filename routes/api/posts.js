@@ -82,7 +82,7 @@ router.post('/',passport.authenticate('jwt',{session:false}),upload.single('cont
     {
     newPost.content=req.body.content;
     youtubeValidator.validateUrl(newPost.content)
-                    .then(res=>{newPost.save()
+                    .then(response=>{newPost.save()
                           .then(post=>res.json(post))
                           .catch(err => console.log(err));
                           })
@@ -100,7 +100,7 @@ router.post('/',passport.authenticate('jwt',{session:false}),upload.single('cont
 router.get('/',(req,res)=>{
     Post.find()
         .sort({date: -1})
-        .then(posts=> res.json(posts))
+        .then(posts=> {res.json(posts)})
         .catch(err => res.status(404).json({message: 'no posts found'}))
 });    
 // @route GET api/posts/:id
@@ -138,24 +138,94 @@ router.delete('/:id',passport.authenticate('jwt',{session:false}),(req,res)=>{
         .catch(err=>res.status(404).json({message: 'no post with this id to delete'}))
 });
 
-// @route POST api/posts/like/:id
-// @description Like post
+// @route POST api/posts/upvote/:id
+// @description like post
 // @access Private
-//TODO Change this to make different reactions on a post
 router.post('/like/:id',passport.authenticate('jwt',{session:false}),(req,res)=>{
     Post.findById(req.params.id)
         .then(post=>{
         
             if(post.likes.filter(like=>like.user.toString()===req.user.id).length>0){
-                return res.status(400).json({message: 'Already liked'})
+                 // get index to remove  
+            const removeIndex = post.likes
+            .map(comment=>comment.user.toString())
+            .indexOf(req.user.id); 
+            //remove from array
+            post.likes.splice(removeIndex,1);
+            //Save
+            post.save().then(post=>res.json(post));
             }     
-            // Add user id to likes array
+            else {// Add user id to likes array
             post.likes.unshift({user: req.user.id});
             post.save().then(post =>res.json(post));
+            }
         })
         .catch(err=>res.status(404).json({message: 'no post with this id to like'}))
 });
+//TODO Change this to make different reactions on a post
+router.post('/react/:id',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const errors={};
+    Post.findById(req.params.id)
+        .then(post=>{
+            const result =post.reactions.filter(reaction=>reaction.user.toString()===req.user.id)
+            if(result.length>0){
+            // get index to remove 
+            const removeIndex = post.reactions
+            .map(comment=>comment.user.toString())
+            .indexOf(req.user.id); 
+            //Check if same reaction or not
+                if (req.body.type===result[0].type){
+                //remove from array
+                post.reactions.splice(removeIndex,1);
+                //decrement number by 1
+                if (result[0].type==="stars")
+                {post.nbr_reactions.stars--}
+                else if (result[0].type==="sad")
+                {post.nbr_reactions.sad--}
+                else if (result[0].type==="love")
+                {post.nbr_reactions.love--}
+                else if (result[0].type==="wow")
+                {post.nbr_reactions.wow--}
+                else if (result[0].type==="angry")
+                {post.nbr_reactions.angry--}
+                else {
+                    errors.reactions='no reaction of this type available';
+                    return res.status(400).json(errors);
+                }
+                //Save
+                post.save().then(post=>res.json(post));
+            }
 
+                else{
+                    errors.reactions='You already reacted with '+result[0].type+', Make sure to remove it first';
+                    return res.status(400).json(errors);
+                }
+            
+            }     
+            else {// Add user id to likes array
+            post.reactions.unshift({user: req.user.id , type: req.body.type});
+            //increment number by 1
+            
+            if (req.body.type==="stars")
+            {post.nbr_reactions.stars++}
+            else if (req.body.type==="sad")
+            {post.nbr_reactions.sad++}
+            else if (req.body.type==="love")
+            {post.nbr_reactions.love++}
+            else if (req.body.type==="wow")
+            {post.nbr_reactions.wow++}
+            else if (req.body.type==="angry")
+            {post.nbr_reactions.angry++}
+            else {
+                errors.reactions='no reaction of this type available';
+                return res.status(400).json(errors);
+            }
+            post.save().then(post =>res.json(post));
+            }
+        })
+        .catch(err=>{console.log(err);res.status(404).json({message: 'no post with this id to react to'})})
+});
+/*
 // @route POST api/posts/unlike/:id
 // @description Unlike post
 // @access Private
@@ -176,8 +246,9 @@ router.post('/unlike/:id',passport.authenticate('jwt',{session:false}),(req,res)
                 //Save
                 post.save().then(post=>res.json(post));
         })
-        .catch(err=>res.status(404).json({message: 'no post with this id to unlike'}))
+        .catch(err=>res.status(404).json({message: 'no post with this id is available'}))
 });
+*/
 
 // @route POST api/posts/comment/:id
 // @description Add comment to post
@@ -191,15 +262,17 @@ router.post('/comments/:id',passport.authenticate('jwt',{session:false}),(req,re
     Post.findById(req.params.id)
         .then(post=>{
             const newComment = {
-                text:req.body.text,
-                name:req.user.name,       //name:req.body.name,
+                text:req.body.text,       //name:req.body.name,
                 avatar:req.user.avatar,   //avatar:req.body.avatar,
                 user:req.user.id
             } ;
+            Profile.findOne({user: req.user.id})
+           .then(profile=>{newComment.handle=profile.handle;
             //Add comment to comments array
             post.comments.unshift(newComment);
             //Save
             post.save().then(post=>res.json(post));
+        })
         })
         .catch(err=>res.status(404).json({message: 'No post found'}))
 });
