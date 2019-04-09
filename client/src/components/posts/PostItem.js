@@ -48,6 +48,7 @@ class PostItem extends Component {
   render() {
     //TODO Add when the post was added by substracting current date - post.date and maybe add the number of comments
     const { post,  showActions , errors} = this.props;
+    const linkProfile="profile/"+post.handle;
     const ImageContent=(<img
     //width ='50px'
     //height = '400px'
@@ -62,15 +63,15 @@ class PostItem extends Component {
     const itemFormat=(<div className="card card-body mb-3">
     <div className="row">
       <div className="col-md-2">
-        <a href="profile.html">
+        <a href={linkProfile}>
           <img
             className="rounded-circle d-none d-md-block"
             src={"http://localhost:3000/"+post.avatar}
             alt=""
           />
-        </a>
         <br />
-        <p className="text-center">{post.handle}</p>
+        <p className="text-center" style={{color: "black"}}>{post.handle}</p>
+        </a>
       </div>
       <div className="col-md-10">
         <Link to={`/post/${post._id}`} className="text-center" style= {{fontSize:'25px',textDecoration: 'none' , color:'black' }}>
@@ -108,15 +109,15 @@ class PostItem extends Component {
   <div className="card card-body mb-3">
   <div className="row">
     <div className="col-md-2">
-      <a href="profile.html">
+      <a href={linkProfile}>
         <img
           className="rounded-circle d-none d-md-block"
           src={"http://localhost:3000/"+post.avatar}
           alt=""
         />
-      </a>
       <br />
-      <p className="text-center">{post.handle}</p>
+      <p className="text-center" style={{color: 'black'}}>{post.handle}</p>
+      </a>
     </div>
     <div className="col-md-10">
           {showActions? null : <p className="lead">{post.description}</p>} 
