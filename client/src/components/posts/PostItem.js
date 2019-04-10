@@ -49,12 +49,42 @@ class PostItem extends Component {
     //TODO Add when the post was added by substracting current date - post.date and maybe add the number of comments
     const { post,  showActions , errors} = this.props;
     const linkProfile="profile/"+post.handle;
+    //Like button if logged in
+    const likeButton=(<button
+      onClick={this.onLikeClick.bind(this, post._id)}
+      type="button"
+      className="btn btn-light mr-1"
+    >
+      <i
+        className={classnames('fa fa-thumbs-up', {
+          'text-info': this.findUserLike(post.likes)
+        })}
+      />
+      <span className="badge badge-light">{post.likes.length}</span>
+    </button>);
+
+    //Like button redirects to login if not logged in
+    const redirectButton=(<Link to='/login'><button
+      type="button"
+      className="btn btn-light mr-1"
+    >
+      <i
+        className={classnames('fa fa-thumbs-up', {
+          'text-info': this.findUserLike(post.likes)
+        })}
+      />
+      <span className="badge badge-light">{post.likes.length}</span>
+    </button></Link>);
+
+    // Content if it's an image
     const ImageContent=(<img
     //width ='50px'
     //height = '400px'
       src={"http://localhost:3000/"+post.content}
       alt=""
     />);
+
+    //Content if it's a video
     const VideoContent=(<ReactPlayer
         url={post.content}
         controls
@@ -80,19 +110,7 @@ class PostItem extends Component {
             {showActions? null : <p className="lead">{post.description}</p>}  
         <div className="lead">{post.type==="Image" ? ImageContent : VideoContent}</div>
           <span>
-            <button
-              onClick={this.onLikeClick.bind(this, post._id)}
-              type="button"
-              className="btn btn-light mr-1"
-            >
-              <i
-                className={classnames('fa fa-thumbs-up', {
-                  'text-info': this.findUserLike(post.likes)
-                })}
-              />
-              
-              <span className="badge badge-light">{post.likes.length}</span>
-            </button>
+            {this.props.auth.isAuthentificated? likeButton : redirectButton}
             
             <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
               Comments
@@ -102,6 +120,97 @@ class PostItem extends Component {
       </div>
     </div>
   </div>);
+  // element to display reactions when logged in
+    const reactionDisplay=(<div><div className={classnames('form-control form-control-lg', {
+      'is-invalid': errors.reactions
+    })} 
+    
+    style={{marginLeft: 'auto' , marginRight: 'auto' , display: 'block' , width: '35%'}}>
+  <span>
+        <button
+          onClick={this.onReactClick.bind(this, post._id,"love")}
+          type="button"
+         className="btn btn-light mr-1"
+        >
+          <i
+            className={classnames('far fa-grin-hearts', {
+              'text-info': this.findUserReact(post.reactions)
+            })}
+          />
+          
+          <span className="badge badge-light">{post.nbr_reactions.love}</span>
+        </button>
+        </span>             
+        <span>
+        <button
+          onClick={this.onReactClick.bind(this, post._id,"wow")}
+          type="button"
+         className="btn btn-light mr-1"
+        >
+          <i
+            className={classnames('far fa-surprise', {
+              'text-info': this.findUserReact(post.reactions)
+            })}
+          />
+          
+          <span className="badge badge-light">{post.nbr_reactions.wow}</span>
+        </button>
+        </span>      
+        <span>
+        <button
+          onClick={this.onReactClick.bind(this, post._id,"sad")}
+          type="button"
+         className="btn btn-light mr-1"
+        >
+          <i
+            className={classnames('far fa-sad-tear', {
+              'text-info': this.findUserReact(post.reactions)
+            })}
+          />
+          
+          <span className="badge badge-light">{post.nbr_reactions.sad}</span>
+        </button>
+        </span>      
+        <span>
+        <button
+          onClick={this.onReactClick.bind(this, post._id,"angry")}
+          type="button"
+          className="btn btn-light mr-1"
+        >
+          <i
+            className={classnames('far fa-angry', {
+              'text-info': this.findUserReact(post.reactions)
+            })}
+          />
+          
+          <span className="badge badge-light">{post.nbr_reactions.angry}</span>
+        </button>
+        </span>      
+        <span>
+        <button
+          onClick={this.onReactClick.bind(this, post._id,"stars")}
+          type="button"
+          className="btn btn-light mr-1"
+        >
+          <i
+            className={classnames('far fa-grin-stars', {
+              'text-info': this.findUserReact(post.reactions)
+            })}
+          />
+          
+          <span className="badge badge-light">{post.nbr_reactions.stars}</span>
+        </button>
+        </span>     
+        </div>
+        
+        {errors.reactions && <div className="invalid-feedback" style={{textAlign: 'center'}}>{errors.reactions}</div>}         
+</div>);
+
+// button to login page to appear when user is not logged in instead of reactions
+
+    const loginButton=(<div className="wrapper" style={{textAlign: 'center'}}><Link to='/login'>
+    <button type="button" className="btn btn-light">Login first to React</button></Link></div>);
+
 
 // Single Post details format
   const postFormat =(<div>
@@ -127,90 +236,7 @@ class PostItem extends Component {
     <div className="lead" style={{marginLeft: 'auto' , marginRight: 'auto' , display: 'block' , width: '60%'}}>
     {post.type==="Image" ? ImageContent : VideoContent}</div>
 
-<div className={classnames('form-control form-control-lg', {
-          'is-invalid': errors.reactions
-        })} 
-        
-        style={{marginLeft: 'auto' , marginRight: 'auto' , display: 'block' , width: '35%'}}>
-      <span>
-            <button
-              onClick={this.onReactClick.bind(this, post._id,"love")}
-              type="button"
-             className="btn btn-light mr-1"
-            >
-              <i
-                className={classnames('far fa-grin-hearts', {
-                  'text-info': this.findUserReact(post.reactions)
-                })}
-              />
-              
-              <span className="badge badge-light">{post.nbr_reactions.love}</span>
-            </button>
-            </span>             
-            <span>
-            <button
-              onClick={this.onReactClick.bind(this, post._id,"wow")}
-              type="button"
-             className="btn btn-light mr-1"
-            >
-              <i
-                className={classnames('far fa-surprise', {
-                  'text-info': this.findUserReact(post.reactions)
-                })}
-              />
-              
-              <span className="badge badge-light">{post.nbr_reactions.wow}</span>
-            </button>
-            </span>      
-            <span>
-            <button
-              onClick={this.onReactClick.bind(this, post._id,"sad")}
-              type="button"
-             className="btn btn-light mr-1"
-            >
-              <i
-                className={classnames('far fa-sad-tear', {
-                  'text-info': this.findUserReact(post.reactions)
-                })}
-              />
-              
-              <span className="badge badge-light">{post.nbr_reactions.sad}</span>
-            </button>
-            </span>      
-            <span>
-            <button
-              onClick={this.onReactClick.bind(this, post._id,"angry")}
-              type="button"
-              className="btn btn-light mr-1"
-            >
-              <i
-                className={classnames('far fa-angry', {
-                  'text-info': this.findUserReact(post.reactions)
-                })}
-              />
-              
-              <span className="badge badge-light">{post.nbr_reactions.angry}</span>
-            </button>
-            </span>      
-            <span>
-            <button
-              onClick={this.onReactClick.bind(this, post._id,"stars")}
-              type="button"
-              className="btn btn-light mr-1"
-            >
-              <i
-                className={classnames('far fa-grin-stars', {
-                  'text-info': this.findUserReact(post.reactions)
-                })}
-              />
-              
-              <span className="badge badge-light">{post.nbr_reactions.stars}</span>
-            </button>
-            </span>     
-            </div>
-            
-            {errors.reactions && <div className="invalid-feedback" style={{textAlign: 'center'}}>{errors.reactions}</div>} 
-            
+    {this.props.auth.isAuthentificated? reactionDisplay : loginButton}
             
 </div>
 );

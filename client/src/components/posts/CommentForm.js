@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import { addComment } from '../../actions/postActions';
-
+import {Link} from 'react-router-dom';
 class CommentForm extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +24,6 @@ class CommentForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-
     const { user } = this.props.auth;
     const { postId } = this.props;
 
@@ -44,7 +43,14 @@ class CommentForm extends Component {
 
   render() {
     const { errors } = this.state;
-
+    const submitButton =  
+    (<button type="submit" className="btn btn-dark">
+      Submit
+    </button>);
+    const redirectButton= (<Link to='/login'>
+    <button type="submit" className="btn btn-dark">
+      Submit
+    </button></Link>);
     return (
       <div className="post-form mb-3">
         <div className="card card-info">
@@ -62,9 +68,7 @@ class CommentForm extends Component {
                   error={errors.text}
                 />
               </div>
-              <button type="submit" className="btn btn-dark">
-                Submit
-              </button>
+              {this.props.auth.isAuthentificated?submitButton:redirectButton}
             </form>
           </div>
         </div>

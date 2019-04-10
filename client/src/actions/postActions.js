@@ -128,7 +128,7 @@ export const addComment = (postId, commentData) => dispatch => {
 
 // Delete Comment
 export const deleteComment = (postId, commentId) => dispatch => {
-  axios
+  if (window.confirm('Are you sure? This can NOT be undone!')) {axios
     .delete(`/api/posts/comments/${postId}/${commentId}`)
     .then(res =>
       dispatch({
@@ -141,7 +141,7 @@ export const deleteComment = (postId, commentId) => dispatch => {
         type: GET_ERRORS,
         payload: err.response.data
       })
-    );
+    );}
 };
 
   // Set loading state
