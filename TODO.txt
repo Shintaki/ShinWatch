@@ -1,5 +1,4 @@
 try to make upvotes and reactions not reload the page.
 filter posts by date or by upvotes.
 subscribe button in profile by handle and a list of subscriptions.
-add date to post.
 add posts to profile.

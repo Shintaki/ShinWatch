@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import ReactPlayer from 'react-player';
+import Moment from 'react-moment';
 import { addLike, addReaction} from '../../actions/postActions';
 
 class PostItem extends Component {
@@ -93,15 +94,17 @@ class PostItem extends Component {
     const itemFormat=(<div className="card card-body mb-3">
     <div className="row">
       <div className="col-md-2">
-        <a href={linkProfile}>
+        <a href={linkProfile} style={{textDecoration: 'none'}}>
           <img
             className="rounded-circle d-none d-md-block"
             src={"http://localhost:3000/"+post.avatar}
             alt=""
           />
         <br />
-        <p className="text-center" style={{color: "black"}}>{post.handle}</p>
+        <p className="text-center" style={{color: "black"}}>By : {post.handle}</p>
         </a>
+        <p className="text-center" >Posted in :</p>
+        <p className="text-center" ><Moment format="YYYY-MM-DD HH:mm">{post.date}</Moment></p>
       </div>
       <div className="col-md-10">
         <Link to={`/post/${post._id}`} className="text-center" style= {{fontSize:'25px',textDecoration: 'none' , color:'black' }}>
@@ -114,6 +117,7 @@ class PostItem extends Component {
             
             <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
               Comments
+              <span style={{marginLeft: '5px'}} className="badge badge-light">{post.comments.length}</span>
             </Link>
             
           </span>
@@ -227,6 +231,8 @@ class PostItem extends Component {
       <br />
       <p className="text-center" style={{color: 'black'}}>{post.handle}</p>
       </a>
+      <p className="text-center" >Posted in :</p>
+        <p className="text-center" ><Moment format="YYYY-MM-DD HH:mm">{post.date}</Moment></p>
     </div>
     <div className="col-md-10">
           {showActions? null : <p className="lead">{post.description}</p>} 
