@@ -75,7 +75,25 @@ export const deleteAccount = () => dispatch => {
       );
   }
 };
-
+//Subscribe to a user by handle
+export const addSub = (handle) => dispatch => {
+  const newSub={};
+  newSub.handle=handle;
+  newSub.date=Date.now();
+  axios
+    .post(`/api/users/sub/${handle}`)
+    .then(
+      /*dispatch({
+        type: UPDATE_SUBS,
+        payload: newSub
+    })*/)
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
 // Profile loading
 export const setProfileLoading = () => {
   return {

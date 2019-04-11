@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PostFeed from './PostFeed';
 import Spinner from '../common/Spinner';
 import { getPosts } from '../../actions/postActions';
+import { setSubs } from '../../actions/authActions';
 import SelectListGroup from '../common/SelectListGroup';
 
 class Posts extends Component {
@@ -20,6 +21,7 @@ class Posts extends Component {
   }
   componentDidMount() {
     this.props.getPosts(this.state.type);
+    this.props.setSubs();
   }
 
   render() {
@@ -42,7 +44,7 @@ class Posts extends Component {
                   options={options}
                   info="Choose how you want to filter posts"
                 />
-        <PostFeed key="key" posts={posts} />
+        <PostFeed  posts={posts} />
       </div>
     }
 
@@ -62,11 +64,14 @@ class Posts extends Component {
 
 Posts.propTypes = {
   getPosts: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  post: PropTypes.object.isRequired,
+  subscriptions: PropTypes.object.isRequired,
+  setSubs: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  post: state.post
+  post: state.post,
+  subscriptions: state.subscriptions
 });
 
-export default connect(mapStateToProps, { getPosts })(Posts);
+export default connect(mapStateToProps, { getPosts , setSubs })(Posts);

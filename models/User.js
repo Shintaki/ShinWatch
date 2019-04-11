@@ -25,9 +25,8 @@ date: {
 },
 subscriptions: [
     {
-        creator: {
-            type: Schema.Types.ObjectId,
-            ref: 'users'
+        handle: {
+            type:String,
         },
         date:{
             type: Date,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loginUser } from '../../actions/authActions';
+import { loginUser  } from '../../actions/authActions';
 import TextFieldGroup from '../common/TextFieldGroup';
 
 class Login extends Component {
@@ -40,7 +40,7 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password
     };
-
+    
     this.props.loginUser(userData);
   }
 
@@ -91,7 +91,7 @@ class Login extends Component {
 Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({

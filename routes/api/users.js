@@ -150,5 +150,44 @@ email: req.user.email,
 avatar: req.user.avatar,
 });
 });
+//@route GET /api/users/sub
+//@description Return current user subs
+//@access  Private
+router.get('/sub',passport.authenticate('jwt',{session: false}), (req, res)=>{
+  res.json(
+  req.user.subscriptions
+  )
+  .catch(err => res.status(404).json({message: 'no user logged in'}))
+  });
+
+//@route POST /api/users/sub/:handle
+//@description Subscribe to someone
+//@access  Private
+router.post('/sub/:handle',passport.authenticate('jwt',{session:false}),(req,res)=>{
+  Profile.findOne({handle: req.params.handle})
+      .then(profile=>{
+        if(isEmpty(profile))
+          {return res.status(404).json({message: 'no user with this handle to sub to'})}
+        else
+        {
+
+          if(req.user.subscriptions.filter(sub=>sub.handle===req.params.handle).length>0){
+          // get index to remove  
+          const removeIndex = req.user.subscriptions
+          .map(subToRemove=>subToRemove.handle)
+          .indexOf(req.params.handle); 
+          //remove from array
+          req.user.subscriptions.splice(removeIndex,1);
+          //Save
+          req.user.save().then(user=>res.json(user));
+          }     
+          else {// Add user handle to subs array
+          req.user.subscriptions.unshift({handle : req.params.handle});
+          req.user.save().then(user =>res.json(user));
+            }
+        }
+      })
+      .catch(err=>res.status(404).json({message: 'no user with this handle to sub to'}))
+});
 
 module.exports = router;

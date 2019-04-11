@@ -2,7 +2,7 @@ import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken'
 import jwt_decode from 'jwt-decode';
 
-import { GET_ERRORS , SET_CURRENT_USER } from './types';
+import { GET_ERRORS , SET_CURRENT_USER , SET_SUBS} from './types';
 
 //Register User
 export const registerUser = (UserData,history) => dispatch => {
@@ -13,6 +13,7 @@ export const registerUser = (UserData,history) => dispatch => {
         dispatch({
             type: GET_ERRORS,
             payload: err.response.data })
+        
             );
 }
 // Login - Get User Token
@@ -36,12 +37,28 @@ export const loginUser = userData => dispatch => {
         );
   
 }
+export const setSubs = () => dispatch =>{
+  axios.get('/api/users/sub')
+  .then(res =>{
+    dispatch(setCurrentSubs(res))
+  })
+  .catch(err => dispatch({
+    type: GET_ERRORS,
+    payload: err.response.data })
+    )
+}
 // Set logged in user
 export const setCurrentUser = (decoded) => {
     return { 
         type: SET_CURRENT_USER,
         payload: decoded
     }
+}
+export const setCurrentSubs = (subs) => {
+  return { 
+      type: SET_SUBS,
+      payload: subs
+  }
 }
 
 // Log user out
@@ -51,5 +68,6 @@ export const logoutUser = () => dispatch => {
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty and isAuthentificated to false
-  dispatch(setCurrentUser({}));  
+  dispatch(setCurrentUser({})); 
+  dispatch(setCurrentSubs([])); 
 }

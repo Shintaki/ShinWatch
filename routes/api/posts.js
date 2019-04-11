@@ -138,7 +138,7 @@ router.delete('/:id',passport.authenticate('jwt',{session:false}),(req,res)=>{
         .catch(err=>res.status(404).json({message: 'no post with this id to delete'}))
 });
 
-// @route POST api/posts/upvote/:id
+// @route POST api/posts/like/:id
 // @description like post
 // @access Private
 router.post('/like/:id',passport.authenticate('jwt',{session:false}),(req,res)=>{
@@ -225,30 +225,7 @@ router.post('/react/:id',passport.authenticate('jwt',{session:false}),(req,res)=
         })
         .catch(err=>{console.log(err);res.status(404).json({message: 'no post with this id to react to'})})
 });
-/*
-// @route POST api/posts/unlike/:id
-// @description Unlike post
-// @access Private
-//TODO Change this to make different reactions on a post
-router.post('/unlike/:id',passport.authenticate('jwt',{session:false}),(req,res)=>{
-    Post.findById(req.params.id)
-        .then(post=>{
-            
-            if(post.likes.filter(like=>like.user.toString()===req.user.id).length===0){
-                return res.status(400).json({message: 'You have not yet liked this post'})
-            }     
-            // get index to remove  
-            const removeIndex = post.likes
-                .map(comment=>comment.user.toString())
-                .indexOf(req.user.id); 
-                //remove from array
-                post.likes.splice(removeIndex,1);
-                //Save
-                post.save().then(post=>res.json(post));
-        })
-        .catch(err=>res.status(404).json({message: 'no post with this id is available'}))
-});
-*/
+
 
 // @route POST api/posts/comment/:id
 // @description Add comment to post

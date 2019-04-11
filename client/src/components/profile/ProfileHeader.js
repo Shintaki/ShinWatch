@@ -1,10 +1,34 @@
 import React, { Component } from 'react';
 import isEmpty from '../../utils/is-empty';
+import {addSub} from '../../actions/profileActions';
+import {setSubs} from '../../actions/authActions';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class ProfileHeader extends Component {
+
+  onClick(){
+    this.props.addSub(this.props.profile.handle); 
+  }
   render() {
+    if(this.props.auth.isAuthentificated) this.props.setSubs(); 
     const { profile } = this.props;
     const avatarLink = "http://localhost:3000/"+profile.user.avatar;
+    const subButton=(<button
+      onClick={this.onClick.bind(this)}
+      className="btn btn-light"
+    >Subscribe</button>);
+
+
+    const unsubButton=(<button
+      onClick={this.onClick.bind(this)}
+      className="btn btn-danger"
+    >Unsubscribe</button>)
+    
+    
+    const button =(this.props.subscriptions.subscriptions.filter(sub=>sub.handle===this.props.profile.handle).length>0? unsubButton : subButton);
+    
+    
     return (
       <div className="row">
         <div className="col-md-12">
@@ -82,6 +106,7 @@ class ProfileHeader extends Component {
                   </a>
                 )}
               </p>
+            {this.props.auth.isAuthentificated? button : null}
             </div>
           </div>
         </div>
@@ -90,4 +115,18 @@ class ProfileHeader extends Component {
   }
 }
 
-export default ProfileHeader;
+ProfileHeader.propTypes = {
+  addSub: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  setSubs: PropTypes.func.isRequired,
+  subscriptions: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+  auth: state.auth,
+  user: state.user,
+  subscriptions: state.subscriptions
+});
+
+
+export default connect(mapStateToProps, { addSub ,setSubs})(ProfileHeader);

@@ -7,6 +7,7 @@ import {
     GET_POSTS,
     GET_POST,
     POST_LOADING,
+    GET_POSTSBYHANDLE,
     CLEAR_ERRORS
 } from './types';
 
@@ -38,6 +39,24 @@ export const getPosts = () => dispatch => {
       .catch(err =>
         dispatch({
           type: GET_POSTS,
+          payload: null
+        })
+      );
+  };
+  //get posts by handle
+  export const getPostsByHandle = handle => dispatch => {
+    dispatch(setPostLoading());
+    axios
+      .get(`/api/posts/handle/${handle}`)
+      .then(res =>{
+        dispatch({
+          type: GET_POSTSBYHANDLE,
+          payload: res.data
+        })}
+      )
+      .catch(err =>
+        dispatch({
+          type: GET_POSTSBYHANDLE,
           payload: null
         })
       );

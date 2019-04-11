@@ -5,8 +5,6 @@ import isEmpty from '../../utils/is-empty';
 class ProfileAbout extends Component {
   render() {
     const { profile } = this.props;
-
-    // Get first name
     const handle = profile.handle;
 
     return (
