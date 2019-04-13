@@ -1,3 +1,2 @@
 try to make upvotes and reactions not reload the page.
 filter posts by date or by upvotes.
-list of profiles of subscriptions and list of profile by handle search bar.

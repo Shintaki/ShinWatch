@@ -28,7 +28,13 @@ export const loginUser = userData => dispatch => {
           setAuthToken(token);
           // get user data from token
           const decoded = jwt_decode(token);
-          //Set current user
+          // add user handle to data
+          axios
+      .get('/api/users/handle')
+      .then(res => {
+          decoded.handle=res.data.handle;    
+      })
+      //Set current user
           dispatch(setCurrentUser(decoded));
         })
       .catch(err => dispatch({
@@ -37,8 +43,20 @@ export const loginUser = userData => dispatch => {
         );
   
 }
+//sets current user's subs
 export const setSubs = () => dispatch =>{
   axios.get('/api/users/sub')
+  .then(res =>{
+    dispatch(setCurrentSubs(res))
+  })
+  .catch(err => dispatch({
+    type: GET_ERRORS,
+    payload: err.response.data })
+    )
+}
+//set subs by handle search
+export const setSubsByHandle = (handle) => dispatch =>{
+  axios.get(`/api/users/sub/${handle}`)
   .then(res =>{
     dispatch(setCurrentSubs(res))
   })

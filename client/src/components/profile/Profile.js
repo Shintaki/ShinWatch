@@ -37,7 +37,7 @@ class Profile extends Component {
             
             <div className="col-md-6" />
           </div>
-          <ProfileHeader profile={profile} />
+          <ProfileHeader profile={profile} from='fromProfile' />
           <ProfileAbout profile={profile} />
           <div style={{ marginBottom: '60px' }} />
           <div className="panel-footer row" >

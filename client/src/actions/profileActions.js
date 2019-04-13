@@ -1,7 +1,9 @@
 import axios from 'axios';
+import isEmpty from '../utils/is-empty';
 
 import {
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
@@ -25,6 +27,46 @@ export const getCurrentProfile = () => dispatch => {
         payload: {}
       })
     );
+};
+// Get all profiles
+export const getProfiles = () => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .get('/api/profile/all')
+    .then(res =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: null
+      })
+    );
+};
+// Get all profiles
+export const getProfilesBySearch = (searchText) => dispatch => {
+  dispatch(setProfileLoading());
+  if (!isEmpty(searchText)){
+  axios
+    .get(`/api/profile/all/${searchText}`)
+    .then(res =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: null
+      })
+    );}
+    else{
+      dispatch(getProfiles());
+    }
 };
 // Get profile by handle
 export const getProfileByHandle = handle => dispatch => {

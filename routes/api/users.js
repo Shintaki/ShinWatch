@@ -150,6 +150,23 @@ email: req.user.email,
 avatar: req.user.avatar,
 });
 });
+//@route GET /api/users/handle
+//@description Return current user's handle
+//@access  Private
+router.get('/handle',passport.authenticate('jwt',{session: false}), (req, res)=>{
+  Profile.findOne({user : req.user.id})
+  .then(profile => {  
+    res.json({
+    handle : profile.handle
+    });
+})
+  .catch(err=>{
+    console.log(err);
+    res.json({
+    handle : ''
+  })
+})
+});
 //@route GET /api/users/sub
 //@description Return current user subs
 //@access  Private
@@ -157,7 +174,21 @@ router.get('/sub',passport.authenticate('jwt',{session: false}), (req, res)=>{
   res.json(
   req.user.subscriptions
   )
-  .catch(err => res.status(404).json({message: 'no user logged in'}))
+  });
+//@route GET /api/users/sub/:search
+//@description Return current user subs by search
+//@access  Private
+router.get('/sub/:search',passport.authenticate('jwt',{session: false}), (req, res)=>{
+  const subs = [];
+  let reg = new RegExp('.*'+req.params.search+'.*',"i")
+  req.user.subscriptions.forEach(function(element) {
+    if(element.profile.handle.match(reg))
+    {
+      subs.unshift(element)};
+    });
+    res.json(
+      subs
+      )
   });
 
 //@route POST /api/users/sub/:handle
@@ -165,16 +196,16 @@ router.get('/sub',passport.authenticate('jwt',{session: false}), (req, res)=>{
 //@access  Private
 router.post('/sub/:handle',passport.authenticate('jwt',{session:false}),(req,res)=>{
   Profile.findOne({handle: req.params.handle})
+        .populate('user',['avatar'])        
       .then(profile=>{
         if(isEmpty(profile))
           {return res.status(404).json({message: 'no user with this handle to sub to'})}
         else
         {
-
-          if(req.user.subscriptions.filter(sub=>sub.handle===req.params.handle).length>0){
+          if(req.user.subscriptions.filter(sub=>sub.profile.handle===req.params.handle).length>0){
           // get index to remove  
           const removeIndex = req.user.subscriptions
-          .map(subToRemove=>subToRemove.handle)
+          .map(subToRemove=>subToRemove.profile.handle)
           .indexOf(req.params.handle); 
           //remove from array
           req.user.subscriptions.splice(removeIndex,1);
@@ -182,12 +213,21 @@ router.post('/sub/:handle',passport.authenticate('jwt',{session:false}),(req,res
           req.user.save().then(user=>res.json(user));
           }     
           else {// Add user handle to subs array
-          req.user.subscriptions.unshift({handle : req.params.handle});
+          let newSub = {};
+          newSub.about=profile.about;
+          newSub.website=profile.website;
+          newSub.location=profile.location;
+          newSub.status=profile.status;
+          newSub.user=profile.user;
+          newSub.handle=profile.handle;
+          newSub.socials=profile.socials;
+          newSub.avatar=profile.user.avatar;
+          req.user.subscriptions.unshift({profile : newSub});
           req.user.save().then(user =>res.json(user));
             }
         }
       })
-      .catch(err=>res.status(404).json({message: 'no user with this handle to sub to'}))
+      .catch(err=>{console.log(err);res.status(404).json({message: 'no user with this handle to sub to'})})
 });
 
 module.exports = router;

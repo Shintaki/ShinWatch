@@ -21,17 +21,17 @@ avatar: {
 },
 date: {
     type: Date,
-    default: Date.now,
+    default: Date.now(),
 },
 subscriptions: [
     {
-        handle: {
-            type:String,
+        profile: {
+            type: Object,
         },
-        date:{
+        date: {
             type: Date,
             default: Date.now()
-        },
+        }
     }
 
 ],

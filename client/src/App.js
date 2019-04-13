@@ -7,6 +7,8 @@ import {setCurrentUser} from './actions/authActions'
 import {logoutUser} from './actions/authActions'
 import { clearCurrentProfile } from './actions/profileActions';
 import Profile from './components/profile/Profile';
+import Profiles from './components/profiles/Profiles';
+import SubProfiles from './components/profiles/SubProfiles';
 import PrivateRoute from './components/common/PrivateRoute';
 import CreateProfile from './components/profile/CreateProfile'
 import EditProfile from './components/profile/EditProfile'
@@ -20,7 +22,7 @@ import Login from './components/auth/Login'
 import PostForm from './components/posts/PostForm'
 import Posts from './components/posts/Posts'
 import Post from './components/posts/Post'
-
+import axios from 'axios';
 import './App.css';
 
 //Check for token
@@ -32,6 +34,11 @@ if(localStorage.jwtToken){
   const decoded = jwt_decode(localStorage.jwtToken);
   // Set user and isAuthentificated
   store.dispatch(setCurrentUser(decoded));
+  axios
+      .get('/api/users/handle')
+      .then(res => {
+          decoded.handle=res.data.handle;    
+      })
   // Logout user on token timeout
   const currentTime = Date.now() / 1000 ;
   if (decoded.exp<currentTime){
@@ -77,6 +84,10 @@ class App extends Component {
         </Switch>
         <Route exact path="/posts" component={Posts} />
         <Route exact path="/post/:id" component={Post} />
+        <Route exact path="/profiles" component={Profiles} />
+        <Switch>
+        <PrivateRoute exact path="/subprofiles" component={SubProfiles} />
+         </Switch>
          </div>
         <Footer />
         </div >

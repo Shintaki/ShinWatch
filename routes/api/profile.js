@@ -29,6 +29,40 @@ router.get('/', passport.authenticate('jwt', {session:false}),(req,res)=>{
            .catch(err =>res.status(404).json(err));
 });   
 
+// @route   GET api/profile/all
+// @desc    Get all profiles
+// @access  Public
+router.get('/all', (req, res) => {
+    const errors = {};
+  
+    Profile.find()
+      .populate('user', ['name', 'avatar'])
+      .then(profiles => {
+        if (!profiles) {
+          errors.noprofile = 'There are no profiles';
+          return res.status(404).json(errors);
+        }
+  
+        res.json(profiles);
+      })
+      .catch(err => res.status(404).json({ profile: 'There are no profiles' }));
+  });
+// @route   GET api/profile/all/:search
+// @desc    Get profiles by search tags
+// @access  Public
+router.get('/all/:search', (req, res) => {
+    const errors = {};
+    Profile.find({ handle: new RegExp('.*'+req.params.search+'.*', "i")})
+      .populate('user', [  'avatar'])
+      .then(profiles => {
+        if (!profiles) {
+          errors.noprofile = 'There are no profiles';
+          return res.status(404).json(errors);
+        }
+        res.json(profiles);
+      })
+      .catch(err => res.status(404).json({ profile: 'There are no profiles' }));
+  });
 // @route GET api/profile/handle/(handle)
 // @description Get profile by handle
 // @access Public

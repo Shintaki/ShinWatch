@@ -4,6 +4,7 @@ import {addSub} from '../../actions/profileActions';
 import {setSubs} from '../../actions/authActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 
 class ProfileHeader extends Component {
 
@@ -12,7 +13,7 @@ class ProfileHeader extends Component {
   }
   render() {
     if(this.props.auth.isAuthentificated) this.props.setSubs(); 
-    const { profile } = this.props;
+    const { profile} = this.props;
     const avatarLink = "http://localhost:3000/"+profile.user.avatar;
     const subButton=(<button
       onClick={this.onClick.bind(this)}
@@ -26,8 +27,11 @@ class ProfileHeader extends Component {
     >Unsubscribe</button>)
     
     
-    const button =(this.props.subscriptions.subscriptions.filter(sub=>sub.handle===this.props.profile.handle).length>0? unsubButton : subButton);
+    const button =(this.props.subscriptions.subscriptions.filter(sub=>sub.profile.handle===this.props.profile.handle).length>0? unsubButton : subButton);
     
+    const CheckSubsButton=(<Link to='/subprofiles'><button
+      className="btn btn-primary"
+    >Check Subs</button></Link>)
     
     return (
       <div className="row">
@@ -106,7 +110,7 @@ class ProfileHeader extends Component {
                   </a>
                 )}
               </p>
-            {this.props.auth.isAuthentificated? button : null}
+            {this.props.auth.isAuthentificated && (this.props.profile.handle!==this.props.auth.user.handle)? button : CheckSubsButton}
             </div>
           </div>
         </div>
@@ -118,13 +122,11 @@ class ProfileHeader extends Component {
 ProfileHeader.propTypes = {
   addSub: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
   setSubs: PropTypes.func.isRequired,
   subscriptions: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
   auth: state.auth,
-  user: state.user,
   subscriptions: state.subscriptions
 });
 
