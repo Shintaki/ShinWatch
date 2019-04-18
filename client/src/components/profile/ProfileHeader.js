@@ -40,8 +40,10 @@ class ProfileHeader extends Component {
             <div className="row">
               <div className="col-4 col-md-6 m-auto">
                 <img
-                width ='50px'
-                height = '400px'
+                style={{
+                  width:  "500px",
+                  height: "500px",
+                position: "center"}}
                   className="rounded-circle"
                   src={avatarLink}
                   alt=""
@@ -110,7 +112,8 @@ class ProfileHeader extends Component {
                   </a>
                 )}
               </p>
-            {this.props.auth.isAuthentificated && (this.props.profile.handle!==this.props.auth.user.handle)? button : CheckSubsButton}
+            {this.props.auth.isAuthentificated && (this.props.profile.handle!==this.props.auth.user.handle)? button : null}
+            {this.props.auth.isAuthentificated && (this.props.profile.handle===this.props.auth.user.handle)? CheckSubsButton : null}
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 const product = require('./routes/api/product');
+const request = require('./routes/api/request');
 
 
 const app = express();
@@ -39,6 +40,7 @@ app.use('/api/users',users);
 app.use('/api/profile',profile);
 app.use('/api/product',product);
 app.use('/api/posts',posts);
+app.use("/api/request", request);
 
 //Index Route
 app.get('/', (req, res)=> {

@@ -51,7 +51,7 @@ class ShowProfile extends Component {
 
   
 
-  _toggleShowVideo(url) {
+  _/*toggleShowVideo(url) {
     this.state.showVideo[url] = !Boolean(this.state.showVideo[url]);
     this.setState({
       showVideo: this.state.showVideo
@@ -66,7 +66,7 @@ class ShowProfile extends Component {
         this.setState({showGalleryFullscreenButton: false});
       }
     }
-  }
+  }*/
 
   _renderVideo(item) {
     return (
@@ -76,7 +76,7 @@ class ShowProfile extends Component {
                 <a
                   href={hrefLink}
                   className='close-video'
-                  onClick={this._toggleShowVideo.bind(this, item.embedUrl)}
+                  //onClick={this._toggleShowVideo.bind(this, item.embedUrl)}
                 >
                 </a>
                 <iframe

@@ -22,6 +22,7 @@ import Login from './components/auth/Login'
 import PostForm from './components/posts/PostForm'
 import Posts from './components/posts/Posts'
 import Post from './components/posts/Post'
+import CreateRequest from "./components/requests/CreateRequest";
 import axios from 'axios';
 import './App.css';
 
@@ -88,6 +89,13 @@ class App extends Component {
         <Switch>
         <PrivateRoute exact path="/subprofiles" component={SubProfiles} />
          </Switch>
+         <Switch>
+                <PrivateRoute
+                  exact
+                  path="/create-request"
+                  component={CreateRequest}
+                />
+              </Switch>
          </div>
         <Footer />
         </div >

@@ -97,6 +97,9 @@ class PostItem extends Component {
         <a href={linkProfile} style={{textDecoration: 'none'}}>
           <img
             className="rounded-circle d-none d-md-block"
+            style={{
+              width:  '130px',
+              height: '130px'}}
             src={"http://localhost:3000/"+post.avatar}
             alt=""
           />
