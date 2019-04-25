@@ -120,11 +120,30 @@ router.get("/date", (req, res) => {
   // @access Public
   router.get("/upvotes", (req, res) => {
     Post.find()
-      .sort({ likes: -1 })
-      .then(posts => {
-        res.json(posts);
-      })
-      .catch(err => res.status(404).json({ message: "no posts found" }));
+       Post.aggregate(
+        [
+            { "$project": {
+                "user": 1,
+                "description": 1,
+                "content": 1,
+                "type": 1,
+                "handle": 1,
+                "title": 1,
+                "avatar": 1,
+                "likes": 1,
+                "reactions": 1,
+                "nbr_reactions": 1,
+                "comments": 1,
+                "date": 1,
+                "length": { "$size": "$likes" },
+            }},
+            { "$sort": { "length": -1 } }
+        ],
+    )
+    .then( (posts) => 
+            {res.json(posts);}    
+        )
+      .catch(err => {console.log(err);res.status(404).json({ message: "no posts found" })});
   });
 // @route GET api/posts/:id
 // @description show posts by id

@@ -1,5 +1,4 @@
 try to make upvotes and reactions not reload the page.
 add create post and create request buttons.
-fix sort by upvote.
 add points system.
 add products.

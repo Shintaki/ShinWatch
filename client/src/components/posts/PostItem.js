@@ -49,6 +49,7 @@ class PostItem extends Component {
   render() {
     //TODO Add when the post was added by substracting current date - post.date and maybe add the number of comments
     const { post,  showActions , errors} = this.props;
+    console.log(post.nbr_reactions);
     const linkProfile="profile/"+post.handle;
     //Like button if logged in
     const likeButton=(<button

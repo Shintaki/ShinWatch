@@ -49,17 +49,20 @@ export const getPostsByType = type => dispatch => {
   axios
     .get(`/api/posts/${type}`)
     .then(res => {
+      
+  console.log(res.data);
       dispatch({
         type: GET_POSTS,
         payload: res.data
       });
     })
-    .catch(err =>
+    /*.catch(err =>{
+      console.log(err);
       dispatch({
         type: GET_POSTS,
         payload: null
-      })
-    );
+      })}
+    );*/
 };
   //get posts by handle
   export const getPostsByHandle = handle => dispatch => {

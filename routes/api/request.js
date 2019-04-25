@@ -31,12 +31,29 @@ router.get("/date", (req, res) => {
 // @description show request by upvotes
 // @access Public
 router.get("/upvotes", (req, res) => {
-  Request.find()
-    .sort({ likes: -1 })
-    .then(request => {
-      res.json(request);
-    })
-    .catch(err => res.status(404).json({ message: "no posts found" }));
+  Request.aggregate(
+    [
+        { "$project": {
+            "user": 1,
+            "description": 1,
+            "theme": 1,
+            "handle": 1,
+            "title": 1,
+            "avatar": 1,
+            "likes": 1,
+            "reactions": 1,
+            "nbr_reactions": 1,
+            "comments": 1,
+            "date": 1,
+            "length": { "$size": "$likes" },
+        }},
+        { "$sort": { "length": -1 } }
+    ],
+)
+.then( (requests) => 
+        {res.json(requests);}    
+    )
+    .catch(err => res.status(404).json({ message: "no requests found" }));
 });
 
 // @route GET api/request/:id
