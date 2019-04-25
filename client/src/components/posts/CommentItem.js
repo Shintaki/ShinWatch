@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { deleteComment } from '../../actions/postActions';
+import Moment from 'react-moment';
 
 class CommentItem extends Component {
   onDeleteClick(postId, commentId) {
@@ -17,13 +18,17 @@ class CommentItem extends Component {
           <div className="col-md-2">
             <a href="profile.html">
               <img
-                className="rounded-circle d-none d-md-block"
+                className="rounded-circle "
+                style={{
+                  width:  '130px',
+                  height: '130px'}}
                 src={"http://localhost:3000/"+comment.avatar}
                 alt=""
               />
             </a>
             <br />
             <p className="text-center">{comment.handle}</p>
+            <p className="text-center"><Moment format="YYYY-MM-DD HH:mm">{comment.date}</Moment></p>
           </div>
           <div className="col-md-10">
             <p className="lead">{comment.text}</p>

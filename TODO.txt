@@ -1,2 +1,5 @@
 try to make upvotes and reactions not reload the page.
-filter posts by date or by upvotes.
+add create post and create request buttons.
+fix sort by upvote.
+add points system.
+add products.

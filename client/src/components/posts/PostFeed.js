@@ -6,7 +6,7 @@ class PostFeed extends Component {
   render() {
     const { posts } = this.props;
 
-    return posts.map(post => <PostItem key={post.id} post={post} />);
+    return posts.map(post => <PostItem  type={this.props.type} key={post.id} post={post} />);
   }
 }
 

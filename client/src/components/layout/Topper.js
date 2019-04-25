@@ -20,6 +20,7 @@ class Topper extends Component {
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
           <a
+            style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}}
             href="/profile"
             className="nav-link"
           >
@@ -34,6 +35,7 @@ class Topper extends Component {
         </li>
         <li className="nav-item">
           <a
+            style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}}
             href={hrefLink}
             onClick={this.onLogoutClick.bind(this)}
             className="nav-link"
@@ -47,12 +49,12 @@ class Topper extends Component {
     const guestLinks = (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          <Link className="nav-link" to="/register">
+          <Link className="nav-link" style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}} to="/register">
             Sign Up
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/login">
+          <Link className="nav-link" style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}} to="/login">
             Login
           </Link>
         </li>
@@ -62,8 +64,12 @@ class Topper extends Component {
     return (
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
         <div className="container">
-          <Link className="navbar-brand" to="/" >
-            Shinwatch
+          <Link className="navbar-brand" style={{fontSize:'25px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}} to="/" >
+          <img
+              src="http://localhost:3000/public/icons/Untitled.png"
+              alt=''
+                style={{ width: '100px', height: '30px', marginRight: '5px' }}
+            />
           </Link>
           <button
             className="navbar-toggler"
@@ -77,25 +83,25 @@ class Topper extends Component {
           <div className="collapse navbar-collapse" id="mobile-nav">
             <ul className="navbar-nav mr-auto">
             <li className="nav-item">
-                <Link className="nav-link" to="/profiles">
+                <Link className="nav-link" style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}} to="/profiles">
                   {' '}
                   Profiles
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/posts">
+                <Link className="nav-link" style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}} to="/posts">
                   {' '}
                   Posts
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/products">
+                <Link className="nav-link" style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}} to="/products">
                   {' '}
                   Products
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/requests">
+                <Link className="nav-link" style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}} to="/requests">
                   {' '}
                   Requests
                 </Link>

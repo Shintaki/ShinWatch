@@ -23,6 +23,8 @@ import PostForm from './components/posts/PostForm'
 import Posts from './components/posts/Posts'
 import Post from './components/posts/Post'
 import CreateRequest from "./components/requests/CreateRequest";
+import Requests from "./components/requests/Requests";
+import Request from "./components/requests/Request";
 import axios from 'axios';
 import './App.css';
 
@@ -96,6 +98,9 @@ class App extends Component {
                   component={CreateRequest}
                 />
               </Switch>
+              
+              <Route exact path="/requests" component={Requests} />
+                <Route exact path="/request/:id" component={Request} />
          </div>
         <Footer />
         </div >

@@ -24,7 +24,7 @@ const RequestSchema = new Schema({
   avatar: {
     type: String
   },
-  upvotes: [
+  likes: [
     {
       user: {
         type: Schema.Types.ObjectId,
@@ -32,6 +32,39 @@ const RequestSchema = new Schema({
       }
     }
   ],
+  reactions: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "users"
+      },
+      type: {
+        type: String
+      }
+    }
+  ],
+  nbr_reactions: {
+    love: {
+      type: Number,
+      default: 0
+    },
+    angry: {
+      type: Number,
+      default: 0
+    },
+    wow: {
+      type: Number,
+      default: 0
+    },
+    stars: {
+      type: Number,
+      default: 0
+    },
+    sad: {
+      type: Number,
+      default: 0
+    }
+  },
   comments: [
     {
       user: {
@@ -41,7 +74,7 @@ const RequestSchema = new Schema({
       text: {
         type: String
       },
-      name: {
+      handle: {
         type: String
       },
       avatar: {

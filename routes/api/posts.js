@@ -103,6 +103,29 @@ router.get('/',(req,res)=>{
         .then(posts=> {res.json(posts)})
         .catch(err => res.status(404).json({message: 'no posts found'}))
 });    
+// @route GET api/posts/date
+// @description show posts by date
+// @access Public
+router.get("/date", (req, res) => {
+    Post.find()
+      .sort({ date: -1 })
+      .then(posts => {
+        res.json(posts);
+      })
+      .catch(err => res.status(404).json({ message: "no posts found" }));
+  });
+  
+  // @route GET api/posts/upvotes
+  // @description show posts by upvotes
+  // @access Public
+  router.get("/upvotes", (req, res) => {
+    Post.find()
+      .sort({ likes: -1 })
+      .then(posts => {
+        res.json(posts);
+      })
+      .catch(err => res.status(404).json({ message: "no posts found" }));
+  });
 // @route GET api/posts/:id
 // @description show posts by id
 // @access Public

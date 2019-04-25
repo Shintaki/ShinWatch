@@ -43,6 +43,24 @@ export const getPosts = () => dispatch => {
         })
       );
   };
+  // Get Posts by type
+export const getPostsByType = type => dispatch => {
+  dispatch(setPostLoading());
+  axios
+    .get(`/api/posts/${type}`)
+    .then(res => {
+      dispatch({
+        type: GET_POSTS,
+        payload: res.data
+      });
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_POSTS,
+        payload: null
+      })
+    );
+};
   //get posts by handle
   export const getPostsByHandle = handle => dispatch => {
     dispatch(setPostLoading());
@@ -99,10 +117,11 @@ export const deletePost = id => dispatch => {
 };
 
 // Add Like / Remove Like
-export const addLike = id => dispatch => {
+export const addLike = (id,type)=> dispatch => {
+  console.log(type);
   axios
     .post(`/api/posts/like/${id}`)
-    .then(res => dispatch(getPosts()))
+    .then(res => dispatch(getPostsByType(type)))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
