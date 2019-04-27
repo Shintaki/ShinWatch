@@ -115,7 +115,7 @@ class RequestItem extends Component {
             </Link>
             {
               //showActions ? null :
-              <textarea readOnly rows="9" cols="90" className="lead">
+              <textarea readOnly style={{border: 'none', minHeight:'50px',maxHeight:'200px',  height: 'auto'}} rows="18" cols="90" className="lead">
                 {request.description}
               </textarea>
             }
@@ -151,7 +151,7 @@ class RequestItem extends Component {
             marginLeft: "auto",
             marginRight: "auto",
             display: "block",
-            width: "35%"
+            width: "55%"
           }}
         >
           <span>

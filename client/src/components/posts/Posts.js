@@ -6,7 +6,8 @@ import Spinner from '../common/Spinner';
 import { getPosts, getPostsByType } from '../../actions/postActions';
 import { setSubs } from '../../actions/authActions';
 import SelectListGroup from '../common/SelectListGroup';
-
+import {Link} from 'react-router-dom'
+ 
 class Posts extends Component {
   constructor(props) {
     super(props);
@@ -39,6 +40,7 @@ class Posts extends Component {
       postContent = <Spinner />;
     } else {
       postContent = <div>
+        <div className='row'>
         <SelectListGroup
                   placeholder="Type"
                   name="type"
@@ -47,7 +49,12 @@ class Posts extends Component {
                   options={options}
                   info="Choose how you want to filter posts"
                 />
+                <Link to="/addpost" style={{position: 'absolute',right: '0px'}} className="btn btn-light mb-3">
+                Create a Post
+              </Link>
+              </div>
         <PostFeed type={type} posts={posts} />
+        
       </div>
     }
 

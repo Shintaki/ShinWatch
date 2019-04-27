@@ -31,6 +31,7 @@ router.get("/date", (req, res) => {
 // @description show request by upvotes
 // @access Public
 router.get("/upvotes", (req, res) => {
+  // to sort by likes' length
   Request.aggregate(
     [
         { "$project": {

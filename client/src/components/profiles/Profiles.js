@@ -39,6 +39,7 @@ class Profiles extends Component {
                 Browse and check out users' profiles
               </p>
               <SearchField
+                    
                     placeholder="Search..."
                     onChange={this.onChange.bind(this.value)}
                     classNames="test-class"

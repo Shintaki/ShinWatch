@@ -119,7 +119,6 @@ router.get("/date", (req, res) => {
   // @description show posts by upvotes
   // @access Public
   router.get("/upvotes", (req, res) => {
-    Post.find()
        Post.aggregate(
         [
             { "$project": {

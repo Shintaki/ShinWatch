@@ -24,6 +24,7 @@ import Posts from './components/posts/Posts'
 import Post from './components/posts/Post'
 import CreateRequest from "./components/requests/CreateRequest";
 import Requests from "./components/requests/Requests";
+import Products from "./components/products/Products";
 import Request from "./components/requests/Request";
 import axios from 'axios';
 import './App.css';
@@ -101,6 +102,9 @@ class App extends Component {
               
               <Route exact path="/requests" component={Requests} />
                 <Route exact path="/request/:id" component={Request} />
+                <Switch>
+                    <Route exact path="/products" component={Products}/>
+                  </Switch>
          </div>
         <Footer />
         </div >

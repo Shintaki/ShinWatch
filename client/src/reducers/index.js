@@ -5,6 +5,7 @@ import profileReducer from "./profileReducer";
 import postReducer from "./postReducer";
 import subsReducer from "./subsReducer";
 import requestReducer from "./requestReducer";
+import productReducer from "./productReducer";
 
 export default combineReducers({
   auth: authReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   profile: profileReducer,
   post: postReducer,
   subscriptions: subsReducer,
-  request: requestReducer
+  request: requestReducer,
+  product: productReducer
 });

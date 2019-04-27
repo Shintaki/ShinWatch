@@ -37,11 +37,7 @@ const User = require('../../models/User')
 
 // Load input Validation for registry and login
 const validateRegisterInput = require('../../validations/register');
-const validateLoginInput = require('../../validations/login');
-// @route GET api/users/test 
-// @description tests users route
-// @access Public
-router.get('/test', (req, res) => res.json({msg :"Users Work"}));   
+const validateLoginInput = require('../../validations/login'); 
 
 // @route POST api/users/register
 // @description register users  

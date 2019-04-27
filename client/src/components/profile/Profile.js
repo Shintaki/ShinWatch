@@ -46,7 +46,7 @@ class Profile extends Component {
           onClick={this.onDeleteClick.bind(this)}
           className="btn btn-danger"
         >
-          Delete My Accounts
+          Delete My Account
         </button>
         </div>
         <a href="/edit-profile">

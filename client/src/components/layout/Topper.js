@@ -35,7 +35,7 @@ class Topper extends Component {
         </li>
         <li className="nav-item">
           <a
-            style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic'}}
+            style={{fontSize:'20px' ,fontFamily: 'Leitura News' , fontStyle: 'italic',marginTop: '2px'}}
             href={hrefLink}
             onClick={this.onLogoutClick.bind(this)}
             className="nav-link"

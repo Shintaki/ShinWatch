@@ -6,6 +6,7 @@ import Spinner from "../common/Spinner";
 import { getRequests, getRequestsByType } from "../../actions/requestActions";
 import { setSubs } from "../../actions/authActions";
 import SelectListGroup from "../common/SelectListGroup";
+import {Link} from "react-router-dom"
 
 class Requests extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class Requests extends Component {
     } else {
       requestContent = (
         <div>
+          <div className='row'>
           <SelectListGroup
             placeholder="Type"
             name="type"
@@ -46,7 +48,10 @@ class Requests extends Component {
             onChange={this.onChange}
             options={options}
             info="Choose how you want to filter requests"
-          />
+          /><Link to="/create-request" style={{position: 'absolute',right: '0px'}} className="btn btn-light mb-3">
+          Create a Request
+        </Link>
+        </div>
           <RequestFeed type={type} requests={requests} />
         </div>
       );

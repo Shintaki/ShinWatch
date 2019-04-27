@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import RequestItem from "../requests/RequestItem";
-import CommentForm from "../posts/CommentForm";
-import CommentFeed from "../posts/CommentFeed";
+import CommentForm from ".//CommentForm";
+import CommentFeed from "./CommentFeed";
 import Spinner from "../common/Spinner";
 import { getRequest } from "../../actions/requestActions";
 

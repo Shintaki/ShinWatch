@@ -49,7 +49,6 @@ class PostItem extends Component {
   render() {
     //TODO Add when the post was added by substracting current date - post.date and maybe add the number of comments
     const { post,  showActions , errors} = this.props;
-    console.log(post.nbr_reactions);
     const linkProfile="profile/"+post.handle;
     //Like button if logged in
     const likeButton=(<button
@@ -58,6 +57,7 @@ class PostItem extends Component {
       className="btn btn-light mr-1"
     >
       <i
+        
         className={classnames('fa fa-thumbs-up', {
           'text-info': this.findUserLike(post.likes)
         })}
@@ -133,7 +133,7 @@ class PostItem extends Component {
       'is-invalid': errors.reactions
     })} 
     
-    style={{marginLeft: 'auto' , marginRight: 'auto' , display: 'block' , width: '35%'}}>
+    style={{marginLeft: 'auto' , marginRight: 'auto' , display: 'block' , width: '55%'}}>
   <span>
         <button
           onClick={this.onReactClick.bind(this, post._id,"love")}
