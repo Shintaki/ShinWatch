@@ -103,7 +103,7 @@ class App extends Component {
               <Route exact path="/requests" component={Requests} />
                 <Route exact path="/request/:id" component={Request} />
                 <Switch>
-                    <Route exact path="/products" component={Products}/>
+                    <PrivateRoute exact path="/products" component={Products}/>
                   </Switch>
          </div>
         <Footer />

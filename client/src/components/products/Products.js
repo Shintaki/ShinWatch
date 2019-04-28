@@ -20,6 +20,7 @@ class Products extends Component {
     } else {
     postContent=
       <div>
+         <p style={{fontSize: '20px' , fontStyle: 'italic'}}>You currently have {this.props.auth.user.pts} Pts to spend</p>
          <Cart products={{addedItems}}/>
          <Home products={{items}}/>
     </div>  
@@ -31,10 +32,12 @@ class Products extends Component {
 Products.propTypes = {
   getProducts: PropTypes.func.isRequired,
   product: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  product: state.product
+  product: state.product,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { getProducts })(Products);

@@ -89,6 +89,8 @@ class PostItem extends Component {
     //Content if it's a video
     const VideoContent=(<ReactPlayer
         url={post.content}
+        width='855px'
+        height='450px'
         controls
       />);
   // item in all posts display format
@@ -243,8 +245,8 @@ class PostItem extends Component {
     </div>
   </div>
 </div>
-    <div className="lead" style={{marginLeft: 'auto' , marginRight: 'auto' , display: 'block' , width: '60%'}}>
-    {post.type==="Image" ? ImageContent : VideoContent}</div>
+    <div className="lead" style={{marginLeft: 'auto' , marginRight: 'auto' , display: 'block' , width: '80%'}}>
+    {post.type==="Image" ? ImageContent : <div >{VideoContent} </div>} </div>
 
     {this.props.auth.isAuthentificated? reactionDisplay : loginButton}
             

@@ -35,6 +35,13 @@ const upload = multer({
 // Load Product Model
 const Product = require('../../models/Product')
 
+// Load Commande Model
+const Commande = require('../../models/Commande')
+
+
+// Load User Model
+const User = require('../../models/User')
+
 // Load input Validation for registry and login
 const validateProductInput = require('../../validations/product');
 
@@ -107,12 +114,74 @@ router.get('/:id',(req,res)=>{
 // @access Private
 
 //TODO modify this to mmake it decrement quantity 
-router.delete('/:id',passport.authenticate('jwt',{session:false}),(req,res)=>{
-    Product.findById(req.params.id)
-        .then(product=>{
-                //Delete the product
-                product.remove().then(()=>res.json({success:true}));
+router.post('/order',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    const errors = {};
+    //no order passed
+    if(req.body.total===0)
+                {   
+                    errors.pts='No order passed'
+                    return res.status(400).json(errors);
+                }   
+    User.findById(req.user.id)
+        .then(user=>{
+                // user points not enough
+                
+                if(user.pts<req.body.total)
+                {   
+                    errors.pts='Not enough points to make this action'
+                    return res.status(400).json(errors);
+                }  
+                //user with enough points to make order 
+                else{
+                    const items = [];
+                    let counter=0;
+                    length=req.body.addedItems.length;
+                    const newOrder = new Commande({
+                    shipping: req.body.shipping,
+                    total: req.body.total,
+                    items: [],
+                    });
+                    
+                    // loop through every element ordered to update db
+                    (req.body.addedItems).forEach(element => {
+                        Product.findOne({_id : element._id})
+                        .then(product => {
+                            if (element.quantity===product.quantity){
+                                // Delete product from db
+                                product.remove().
+                                        then(()=>{console.log('product removed')})
+                            }
+                            else{
+                                //update product quantity in db
+                                product.quantity=product.quantity-element.quantity;
+                                product.save()
+                                        .then(console.log('product updated'))
+                                        
+                            }
+                            element.idproduct=element._id;
+                            items.unshift(element);
+                            counter++;
+                            // execute this after the foreach
+                            if(counter===length){
+                                //create new order in db
+                                newOrder.items=items;
+                                newOrder.save()
+                                .then(console.log('Order passed'))
+                                .catch(err => {console.log(err)})
+                                //update user pts in db
+                                user.pts=user.pts-req.body.total;
+                                user.save()
+                                .then(console.log('User points updated'))
+                                .catch(err => {console.log(err)})
+                                
+                            }
+                        })
+                        .catch(err => {console.log(err)})
+                    });
+                    
+                    
+                }
             })
-        .catch(err=>res.status(404).json({message: 'no product with this id to delete'}))
+        .catch(err=>{console.log(err);res.status(404).json({message: 'no user found'})})
 });
 module.exports = router;

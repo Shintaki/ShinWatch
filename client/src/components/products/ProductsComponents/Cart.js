@@ -18,9 +18,9 @@ class Cart extends Component{
         this.props.subtractQuantity(id);
     }
     render(){
-        let addedItems = this.props.products.addedItems.length ?
+        let addedItems = this.props.product.addedItems.length ?
             (  
-                this.props.products.addedItems.map(item=>{
+                this.props.product.addedItems.map(item=>{
                     return(
                        
                         <li className="collection-item avatar" key={item.id}>
@@ -69,7 +69,7 @@ class Cart extends Component{
 
 const mapStateToProps = (state)=>{
     return{
-        product: state.product.addedItems,
+        product: state.product,
         //addedItems: state.addedItems
     }
 }

@@ -1,4 +1,4 @@
 try to make upvotes and reactions not reload the page.
-add create post and create request buttons.
 add points system.
-add products.
+user points in redux/products page only reloaded when user logs in again, need to fix it.
+

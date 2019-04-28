@@ -1,5 +1,5 @@
 
-import {PRODUCT_LOADING,GET_PRODUCTS,ADD_TO_CART,REMOVE_ITEM,SUB_QUANTITY,ADD_QUANTITY} from './types'
+import {PRODUCT_LOADING,GET_PRODUCTS,ADD_TO_CART,REMOVE_ITEM,SUB_QUANTITY,ADD_QUANTITY, ADD_SHIPPING,SUB_SHIPPING,GET_ERRORS} from './types'
 import axios from 'axios';
 
 // Get Products
@@ -20,6 +20,25 @@ export const getProducts = () => dispatch => {
         })
       );
   };
+  export const passOrder = (order) => dispatch => {
+    //dispatch(setProductsLoading());
+    console.log("here in passOrder")
+    axios
+      .post('/api/product/order',order)
+      .then(res =>{
+        dispatch({
+          type: GET_PRODUCTS,
+          payload: []
+        })
+      })
+      .catch(err =>{console.log(err)
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+    })
+   } );
+  };
+ 
 //add cart action
 export const addToCart= (id)=>{
     return{
@@ -53,3 +72,15 @@ export const setProductsLoading = () => {
       type: PRODUCT_LOADING
     };
   };
+// remove shipping
+  export const addShipping=(id)=>{
+    return{
+        type: ADD_SHIPPING,
+    }
+}
+// add shipping
+export const subShipping=(id)=>{
+  return{
+      type: SUB_SHIPPING,
+  }
+}

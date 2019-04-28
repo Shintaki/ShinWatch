@@ -9,7 +9,7 @@ import { addToCart } from '../../../actions/productActions'
     }
 
     render(){
-        let itemList = this.props.products.items.map(item=>{
+        let itemList = this.props.product.items.map(item=>{
             return(
                 <div className="card-product" key={item.id}>
                         <div className="card-image-product">
@@ -20,6 +20,7 @@ import { addToCart } from '../../../actions/productActions'
 
                         <div className="card-content">
                             <p>{item.desc}</p>
+                            <p><b>Quantity Available: {item.quantity}</b></p>
                             <p><b>Price: {item.price}pts</b></p>
                         </div>
                  </div>
