@@ -141,9 +141,10 @@ const {errors , isValid} = validateLoginInput(req.body);
 //@access  Private
 router.get('/current',passport.authenticate('jwt',{session: false}), (req, res)=>{
 res.json({
+id: req.user.id,
 name: req.user.name,
-email: req.user.email,
 avatar: req.user.avatar,
+pts: req.user.pts
 });
 });
 //@route GET /api/users/handle

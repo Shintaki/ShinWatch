@@ -50,7 +50,6 @@ export const getPostsByType = type => dispatch => {
     .get(`/api/posts/${type}`)
     .then(res => {
       
-  console.log(res.data);
       dispatch({
         type: GET_POSTS,
         payload: res.data

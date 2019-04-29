@@ -20,13 +20,13 @@ export const getProducts = () => dispatch => {
         })
       );
   };
-  export const passOrder = (order) => dispatch => {
+  export const passOrder = (order,history) => dispatch => {
     //dispatch(setProductsLoading());
-    console.log("here in passOrder")
+    
     axios
       .post('/api/product/order',order)
-      .then(res =>{
-        dispatch({
+      .then(() =>{
+          dispatch({
           type: GET_PRODUCTS,
           payload: []
         })
@@ -37,6 +37,7 @@ export const getProducts = () => dispatch => {
         payload: err.response.data
     })
    } );
+   window.location.reload()
   };
  
 //add cart action

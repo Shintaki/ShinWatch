@@ -29,13 +29,13 @@ class ShowProfile extends Component {
       this.props.getPostsByHandle(this.props.match.params.handle);
   }
   }
-
+/*
   componentWillReceiveProps(nextProps) {
     if (nextProps.profile.profile === null && this.props.profile.loading && nextProps.post.posts.length===0) {
       this.props.history.push('/not-found');
     }
   } 
-
+*/
   _handleInputChange(state, event) {
     this.setState({[state]: event.target.value});
   }
@@ -146,7 +146,7 @@ class ShowProfile extends Component {
         <div className="col-md-12">
           <div className="card card-body bg-light mb-3">
             <h3 className="text-center text-info">{profile.handle}'s Posts</h3>
-            {this.props.post.posts.length>0 ? null : <p className="lead">This user didnt's post anything yet</p>}
+            {this.props.post.posts.length>0 ? null : <p className="lead">This user didn't post anything yet</p>}
           </div>
         </div>
       </div>

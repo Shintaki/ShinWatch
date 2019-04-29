@@ -2,7 +2,7 @@ import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken'
 import jwt_decode from 'jwt-decode';
 
-import { GET_ERRORS , SET_CURRENT_USER , SET_SUBS} from './types';
+import { GET_ERRORS , SET_CURRENT_USER,RELOAD_CURRENT_USER , SET_SUBS} from './types';
 
 //Register User
 export const registerUser = (UserData,history) => dispatch => {
@@ -43,6 +43,31 @@ export const loginUser = userData => dispatch => {
         );
   
 }
+// Reload user data
+export const reloadUserData = () => dispatch => {
+  axios
+  .get('/api/users/current')
+  .then(res => {
+      const userData = res.data;
+      // Save Token to local storage
+      const token=localStorage.getItem('jwtToken');
+      const decoded = jwt_decode(token);
+      userData.iat=decoded.iat;
+      userData.exp=decoded.exp;
+      // add user handle to data
+      axios
+  .get('/api/users/handle')
+  .then(res => {
+      userData.handle=res.data.handle;   
+  //Set current user
+  dispatch(reloadCurrentUser(userData));    
+  })
+    })
+  .catch(err => dispatch({
+    type: GET_ERRORS,
+    payload: err.response.data })
+    );
+}
 //sets current user's subs
 export const setSubs = () => dispatch =>{
   axios.get('/api/users/sub')
@@ -71,6 +96,12 @@ export const setCurrentUser = (decoded) => {
         type: SET_CURRENT_USER,
         payload: decoded
     }
+}
+export const reloadCurrentUser = (decoded) => {
+  return { 
+      type: RELOAD_CURRENT_USER,
+      payload: decoded
+  }
 }
 export const setCurrentSubs = (subs) => {
   return { 

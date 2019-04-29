@@ -6,10 +6,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../common/Spinner';
 import { getProducts } from '../../actions/productActions';
+import { reloadUserData } from '../../actions/authActions';
 import './Products.css';
 class Products extends Component {
   componentDidMount() {
-    this.props.getProducts(); 
+    this.props.getProducts();
+    this.props.reloadUserData(); 
    }
   render() {
     const { items, loading } = this.props.product;
@@ -31,6 +33,7 @@ class Products extends Component {
 }
 Products.propTypes = {
   getProducts: PropTypes.func.isRequired,
+  reloadUserData: PropTypes.func.isRequired,
   product: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired
 };
@@ -40,4 +43,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getProducts })(Products);
+export default connect(mapStateToProps, { getProducts,reloadUserData})(Products);

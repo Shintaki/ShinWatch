@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {passOrder, addShipping , subShipping} from '../../../actions/productActions'
 //import { addShipping } from './actions/cartActions'
@@ -40,7 +41,6 @@ class Recipe extends Component{
       order.total=this.props.total;
       order.addedItems=this.props.addedItems;
       order.shipping=this.state.shipping;
-      console.log(this.state.shipping)
       this.props.passOrder(order,this.props.history);
     }
     render(){
@@ -97,4 +97,4 @@ const mapStateToProps = (state)=>{
 }
 
 
-export default connect(mapStateToProps,{addShipping,subShipping,passOrder})(Recipe)
+export default connect(mapStateToProps,{addShipping,subShipping,passOrder})(withRouter(Recipe))
