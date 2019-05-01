@@ -1,3 +1,0 @@
-try to make upvotes and reactions not reload the page.
-add points system.
-

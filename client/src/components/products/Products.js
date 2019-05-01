@@ -23,7 +23,7 @@ class Products extends Component {
     postContent=
       <div>
          <p style={{fontSize: '20px' , fontStyle: 'italic'}}>You currently have {this.props.auth.user.pts} Pts to spend</p>
-         <Cart products={{addedItems}}/>
+         <Cart products={{addedItems}} pts={this.props.auth.user.pts} />
          <Home products={{items}}/>
     </div>  
   }

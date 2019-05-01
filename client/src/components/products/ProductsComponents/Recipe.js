@@ -42,6 +42,8 @@ class Recipe extends Component{
       order.addedItems=this.props.addedItems;
       order.shipping=this.state.shipping;
       this.props.passOrder(order,this.props.history);
+      if(this.props.pts>this.props.total && this.props.addedItems.length>0)
+      {window.location.reload()}
     }
     render(){
         const {errors} = this.state;

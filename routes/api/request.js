@@ -207,10 +207,26 @@ router.post(
           request.likes.splice(removeIndex, 1);
           //Save
           request.save().then(request => res.json(request));
+          User.findById(req.user.id)
+            .then(user=>{
+                //remove the point awarded
+                user.pts=user.pts-1;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
         } else {
           // Add user id to likes array
           request.likes.unshift({ user: req.user.id });
           request.save().then(request => res.json(request));
+          User.findById(req.user.id)
+            .then(user=>{
+                //award a point for upvoting
+                user.pts=user.pts+1;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
         }
       })
       .catch(err =>
@@ -255,6 +271,14 @@ router.post(
             }
             //Save
             request.save().then(request => res.json(request));
+            User.findById(req.user.id)
+            .then(user=>{
+                //remove awarded points for reacting
+                user.pts=user.pts-3;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
           } else {
             errors.reactions =
               "You already reacted with " +
@@ -282,6 +306,14 @@ router.post(
             return res.status(400).json(errors);
           }
           request.save().then(request => res.json(request));
+          User.findById(req.user.id)
+            .then(user=>{
+                //award 3 points for reacting
+                user.pts=user.pts+3;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
         }
       })
       .catch(err => {
@@ -318,6 +350,14 @@ router.post(
           request.comments.unshift(newComment);
           //Save
           request.save().then(request => res.json(request));
+          User.findById(req.user.id)
+            .then(user=>{
+                //award a=5 points for commenting
+                user.pts=user.pts+5;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
         });
       })
       .catch(err => res.status(404).json({ message: "No request found" }));
@@ -356,6 +396,14 @@ router.delete(
         //Remove comment out
         request.comments.splice(removeIndex, 1); //TODO if more than one comment is writen by a user
         request.save().then(request => res.json(request));
+        User.findById(req.user.id)
+            .then(user=>{
+                //remove awarded points for commenting
+                user.pts=user.pts-5;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
       })
       .catch(err => res.status(404).json({ message: "No request found" }));
   }

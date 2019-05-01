@@ -195,10 +195,26 @@ router.post('/like/:id',passport.authenticate('jwt',{session:false}),(req,res)=>
             post.likes.splice(removeIndex,1);
             //Save
             post.save().then(post=>res.json(post));
+            User.findById(req.user.id)
+            .then(user=>{
+                //remove the point awarded
+                user.pts=user.pts-1;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
             }     
             else {// Add user id to likes array
             post.likes.unshift({user: req.user.id});
             post.save().then(post =>res.json(post));
+            User.findById(req.user.id)
+            .then(user=>{
+                //award a point for upvoting
+                user.pts=user.pts+1;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
             }
         })
         .catch(err=>res.status(404).json({message: 'no post with this id to like'}))
@@ -235,6 +251,14 @@ router.post('/react/:id',passport.authenticate('jwt',{session:false}),(req,res)=
                 }
                 //Save
                 post.save().then(post=>res.json(post));
+                User.findById(req.user.id)
+            .then(user=>{
+                //remove points awarded for reacting
+                user.pts=user.pts-3;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
             }
 
                 else{
@@ -262,6 +286,14 @@ router.post('/react/:id',passport.authenticate('jwt',{session:false}),(req,res)=
                 return res.status(400).json(errors);
             }
             post.save().then(post =>res.json(post));
+            User.findById(req.user.id)
+            .then(user=>{
+                //award 3 points for reacting
+                user.pts=user.pts+3;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
             }
         })
         .catch(err=>{console.log(err);res.status(404).json({message: 'no post with this id to react to'})})
@@ -290,6 +322,14 @@ router.post('/comments/:id',passport.authenticate('jwt',{session:false}),(req,re
             post.comments.unshift(newComment);
             //Save
             post.save().then(post=>res.json(post));
+            User.findById(req.user.id)
+            .then(user=>{
+                //award 5 points for commenting
+                user.pts=user.pts+5;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
         })
         })
         .catch(err=>res.status(404).json({message: 'No post found'}))
@@ -317,6 +357,14 @@ router.delete('/comments/:id/:comment_id',passport.authenticate('jwt',{session:f
             //Remove comment out 
             post.comments.splice(removeIndex,1); //TODO if more than one comment is writen by a user
             post.save().then(post=>res.json(post));
+            User.findById(req.user.id)
+            .then(user=>{
+                //remove awarded points for commenting
+                user.pts=user.pts-5;
+                user.save()
+                    .then(console.log('User points updated'))
+                    .catch(err => {console.log(err)})
+            })
         })
         .catch(err=>res.status(404).json({message: 'No post found'}))
 });

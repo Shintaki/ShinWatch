@@ -13,7 +13,7 @@ email: {
 },
 pts: {
     type: Number,
-    default: 0,
+    default: 100,
 },
 password: {
     type: String,

@@ -59,7 +59,7 @@ class Cart extends Component{
                         {addedItems}
                     </ul>
                 </div> 
-                <Recipe />      
+                <Recipe pts={this.props.pts} />      
                 
             </div>
        )
